@@ -1,8 +1,2 @@
 # IBMDataScience-Capstone
-Capstone project for the Coursera IBM Data Science professional certificate.
-
-## Just testing
-More test.
-
-### More Testing
-Just some more words.
+Capstone Assignment: In this capstone, you will take the role of a data scientist working for a new rocket company, SpaceY, that would like to compete with SpaceX founded by Billionaire industrialist Allon Musk. Your job is to determine the price of each launch. You will do this by gathering information about SpaceX and creating dashboards for your team. You will also determine if SpaceX will reuse the first stage. Instead of using rocket science to determine if the first stage will land successfully, you will train a machine learning model and use public information to predict if SpaceX will reuse the first stage.
