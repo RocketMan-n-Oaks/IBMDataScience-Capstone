@@ -59,11 +59,12 @@ app.layout = html.Div(children=[html.H1('SpaceX Launch Records Dashboard',
 
 def update_pie_chart(value):
     if value == 'All':
-        filtered_df = spacex_df.groupby(['class']).count().reset_index()
+        filtered_df = spacex_df.groupby(['Launch_Site']).count().reset_index()
+        fig = px.pie(filtered_df, values='class', names='Launch_Site', title='SpaceX Launches')
     else:
         filtered_df = spacex_df[spacex_df.Launch_Site == value].groupby(['class']).count().reset_index()
+        fig = px.pie(filtered_df, values='Launch_Site', names='class', title='SpaceX Launch Success by Site')
 
-    fig = px.pie(filtered_df, values='Launch_Site', names='class', title='SpaceX Launch Success by Site')
     return fig
 
 # TASK 4:
@@ -82,7 +83,8 @@ def update_scatter_plot(site, slider):
         filtered_df = spacex_df[spacex_df.Launch_Site == site]
         filtered_df = filtered_df[filtered_df['PayloadMass'].between(slider[0], slider[1], inclusive='both')]
 
-    fig = px.scatter(filtered_df, x='Launch_Site', y='PayloadMass', color='class')
+    fig = px.scatter(filtered_df, x='Launch_Site', y='PayloadMass', color='class', labels={"class": "Outcome"})
+
     return fig
 
 # Run the app
