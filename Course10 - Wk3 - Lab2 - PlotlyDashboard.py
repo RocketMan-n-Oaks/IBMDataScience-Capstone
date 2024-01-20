@@ -7,9 +7,16 @@ from dash import callback
 from dash.dependencies import Input, Output
 import plotly.express as px
 
+def text_to_num(string):
+    if string == 'Success':
+        return 1
+    elif string == 'Failure':
+        return 0
+
 # Read the airline data into pandas dataframe
 spacex_df = pd.read_csv("spacex_launch_dash.csv")
 spacex_df = spacex_df.replace({'class':{0:'Failure', 1:'Success'}})
+spacex_df['class_num'] = spacex_df['class'].apply(text_to_num)
 max_payload = spacex_df['PayloadMass'].max()
 min_payload = spacex_df['PayloadMass'].min()
 
@@ -59,11 +66,15 @@ app.layout = html.Div(children=[html.H1('SpaceX Launch Records Dashboard',
 
 def update_pie_chart(value):
     if value == 'All':
-        filtered_df = spacex_df.groupby(['Launch_Site']).count().reset_index()
-        fig = px.pie(filtered_df, values='class', names='Launch_Site', title='SpaceX Launches')
+        # filtered_df = spacex_df.groupby('Launch_Site').count().reset_index()
+        filtered_df = spacex_df.groupby('Launch_Site')['class_num'].sum().reset_index()
+        fig = px.pie(filtered_df, values='class_num', names='Launch_Site', title='SpaceX Launches')
     else:
         filtered_df = spacex_df[spacex_df.Launch_Site == value].groupby(['class']).count().reset_index()
-        fig = px.pie(filtered_df, values='Launch_Site', names='class', title='SpaceX Launch Success by Site')
+        fig = px.pie(filtered_df, values='Launch_Site', names='class', title='SpaceX Launch Success by Site',
+                     color='class',
+                     color_discrete_map={'Failure':"red", 'Success':"green"},
+                     labels={'class': "Outcome"})
 
     return fig
 
@@ -83,7 +94,8 @@ def update_scatter_plot(site, slider):
         filtered_df = spacex_df[spacex_df.Launch_Site == site]
         filtered_df = filtered_df[filtered_df['PayloadMass'].between(slider[0], slider[1], inclusive='both')]
 
-    fig = px.scatter(filtered_df, x='Launch_Site', y='PayloadMass', color='class', labels={"class": "Outcome"})
+    fig = px.scatter(filtered_df, x='Launch_Site', y='PayloadMass', color='class', labels={"class": "Outcome"},
+                     color_discrete_map={'Failure':"red", 'Success':"green"})
 
     return fig
 
