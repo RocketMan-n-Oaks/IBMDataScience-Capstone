@@ -16,3 +16,5 @@ We will be using BeautifulSoup for scraping data from popular wiki pages. Once c
 
 ### Data Wrangling
 The data will need to be cleaned and entries will need to be prep'd for analysis. We will need to deal with null values and search using further API endpoints, via the rocket identification number.
+
+### To Be Continued.... ###
